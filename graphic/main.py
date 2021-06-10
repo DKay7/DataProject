@@ -5,5 +5,5 @@ from tkinter import Tk
 
 if __name__ == "__main__":
     root = Tk()
-    main_window = MainWindow(root, data)
+    main_window = MainWindow(root, None)
     main_window.start_main_loop()
