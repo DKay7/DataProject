@@ -2,12 +2,13 @@ import tkinter as tk
 import pickle
 from tkinter import ttk, filedialog, Menu
 from graphic.graphics_config import *
+from enter_data_form import EditForm
 
 
 class MainWindow(tk.Frame):
-    def __init__(self, root, df):
+    def __init__(self, root):
         self.root_frame = root
-        self.df = df
+        self.df = None
         tk.Frame.__init__(self,  self.root_frame)
 
         self.table_frame = self.get_main_window()
@@ -16,7 +17,6 @@ class MainWindow(tk.Frame):
 
         self.bind_events()
         self.add_main_menu()
-        # self.add_df()
         self.pack()
 
     def add_df(self):
@@ -30,7 +30,7 @@ class MainWindow(tk.Frame):
         for index, row in self.df.iterrows():
             tuple_row = tuple(row)
 
-            self.table.insert("", "end", values=tuple_row)
+            self.table.insert("", "end", text=index, values=tuple_row)
 
         scrollbar = ttk.Scrollbar(self.table_frame, orient=tk.VERTICAL, command=self.table.yview)
         self.table.configure(yscroll=scrollbar.set)
@@ -39,7 +39,7 @@ class MainWindow(tk.Frame):
         self.table_frame.columnconfigure(0, weight=1)
 
         self.table.grid(row=0, column=0, sticky="NSEW")
-        scrollbar.grid(row=0, column=1, sticky="EW")
+        scrollbar.grid(row=0, column=1, sticky="NSEW")
 
     def get_main_window(self):
         self.root_frame.title(WINDOW_TITLE)
@@ -114,9 +114,20 @@ class MainWindow(tk.Frame):
         print("File opened")
 
     def edit_table_entry(self):
-        item_id = self.table.selection()
-        item_values = self.table.item(item_id)["values"]
-        print(item_values)
+        item_id = self.table.selection()[0]
+
+        values = self.table.item(item_id)['values']
+        index = self.table.item(item_id)['text']
+        columns = list(self.df.columns)
+
+        values += [None] * max(0, (len(columns) - len(values)))
+        fields = list(zip(columns, values))
+
+        form = EditForm(self.root_frame, fields)
+        result = form.open()
+
+        self.df.iloc[index] = result
+        self.table.item(item_id, values=result)
 
     def delete_table_entry(self):
         selected_item = self.table.selection()[0]
