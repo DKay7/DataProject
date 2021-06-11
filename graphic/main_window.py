@@ -2,7 +2,8 @@ import tkinter as tk
 import pickle
 from tkinter import ttk, filedialog, Menu
 from graphic.graphics_config import *
-from enter_data_form import EditForm
+from graphic.edit_data_form import EditForm
+from graphic.stats_forms import TextSubForm
 
 
 class MainWindow(tk.Frame):
@@ -60,19 +61,67 @@ class MainWindow(tk.Frame):
 
         if self.table.get_children():
             filemenu.add_command(label="Сохранить...", command=self.save_file_button_action)
+            filemenu.add_command(label="Добавить новую запись в таблицу", command=self.add_table_entry)
 
-            helpmenu = Menu(mainmenu, tearoff=0)
-            helpmenu.add_command(label="Среднее арифметическое времени полетов")
-            helpmenu.add_command(label="Еще какая-то статистика")
+            stats_menu = Menu(mainmenu, tearoff=0)
+            stats_menu.add_command(label="Простой текстовый отчет",
+                                   command=self.prepare_simple_text_stat_submission)
+            stats_menu.add_command(label="Текстовый статистический отчет",
+                                   command=self.prepare_text_stat_submission)
+            stats_menu.add_command(label="Сводная таблица",
+                                   command=self.prepare_summary_table)
+            stats_menu.add_command(label="Кластеризованная столбчатая диаграмма",
+                                   command=self.prepare_clustered_bar_plot)
+            stats_menu.add_command(label="Категоризированная гистограмма",
+                                   command=self.prepare_categorized_histogram)
+            stats_menu.add_command(label="Категоризированная диаграмма Бокса-Вискера",
+                                   command=self.prepare_box_whiskers_diagram)
+            stats_menu.add_command(label="Категоризированная диаграмма рассеивания",
+                                   command=self.prepare_scatter_plot)
 
             mainmenu.add_cascade(label="Файл",
                                  menu=filemenu)
 
             mainmenu.add_cascade(label="Статистика",
-                                 menu=helpmenu)
+                                 menu=stats_menu)
         else:
             mainmenu.add_cascade(label="Файл",
                                  menu=filemenu)
+
+    def prepare_simple_text_stat_submission(self):
+        # TODO make it!
+        print("Простой текстовый отчет")
+
+    def prepare_text_stat_submission(self):
+        # TODO make it!
+        window = TextSubForm(self.root_frame, tuple(self.df.columns))
+        result = window.open()
+
+        if not result:
+            return
+
+        # TODO proceed text submit
+        print("Текстовый отчет", result)
+
+    def prepare_summary_table(self):
+        # TODO make it!
+        print("Сводная таблица")
+
+    def prepare_clustered_bar_plot(self):
+        # TODO make it!
+        print("Столбчатая диаграмма")
+
+    def prepare_categorized_histogram(self):
+        # TODO make it!
+        print("Гистограмма")
+
+    def prepare_box_whiskers_diagram(self):
+        # TODO make it!
+        print("Диаграмма бокса-вискера")
+
+    def prepare_scatter_plot(self):
+        # TODO make it!
+        print("Диаграмма рассеивания")
 
     def bind_events(self):
         self.table.bind("<Button-3>", self.post_mouse_menu)
@@ -104,7 +153,11 @@ class MainWindow(tk.Frame):
 
     def open_file_button_action(self):
         try:
-            with filedialog.askopenfile(mode="rb", filetypes=[('text files', '*.kek')]) as file:
+            with filedialog.askopenfile(mode="rb",
+                                        initialdir=r"../data/",
+                                        defaultextension='.kek',
+                                        filetypes=[('DP-files files', '*.kek')]) as file:
+
                 self.df = pickle.load(file)
                 self.add_df()
                 self.add_main_menu()
@@ -112,6 +165,18 @@ class MainWindow(tk.Frame):
             return
 
         print("File opened")
+
+    def add_table_entry(self):
+        columns = list(self.df.columns)
+        values = [None] * len(columns)
+
+        fields = list(zip(columns, values))
+
+        form = EditForm(self.root_frame, fields, "Добавить новую запись в таблицу")
+        result = form.open()
+
+        self.df.loc[len(self.df.index)] = result
+        self.table.insert("", "end", text=len(self.df.index), values=result)
 
     def edit_table_entry(self):
         item_id = self.table.selection()[0]
@@ -123,7 +188,7 @@ class MainWindow(tk.Frame):
         values += [None] * max(0, (len(columns) - len(values)))
         fields = list(zip(columns, values))
 
-        form = EditForm(self.root_frame, fields)
+        form = EditForm(self.root_frame, fields, "Редактировать значение")
         result = form.open()
 
         self.df.iloc[index] = result
