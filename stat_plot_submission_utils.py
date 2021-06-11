@@ -20,11 +20,6 @@ def sort(flights):
     return years, spaceships
 
 
-def types_list(dataframe):
-    types_dict = {}
-    return types_dict
-
-
 def bar_diagram(params):
     values = 0
     labels = 0
