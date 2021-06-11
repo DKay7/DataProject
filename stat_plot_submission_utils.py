@@ -4,6 +4,11 @@ import pandas as pd
 import re
 
 
+def types_list(dataframe):
+    types_dict = {}
+    return types_dict
+
+
 def sort(flights):
     spaceships = []
     years = []
