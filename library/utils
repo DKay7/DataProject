@@ -1,0 +1,23 @@
+import pandas as pd
+
+
+def types_list(dataframe):
+    dates = []
+
+    for col in dataframe.columns:
+        try:
+            for line in dataframe[col]:
+                d = line.split(':')
+                if len(d) == 3:
+                    d = list(map(int, d))
+                    dates.append(d[0] * 24 * 60 + d[1] * 60 + d[2])
+                if len(dates) == dataframe[col].count():
+                    dataframe.drop(col, axis=1, inplace=True)
+                    dataframe[col] = pd.Series(dates)
+                    dates = []
+        except AttributeError:
+            pass
+
+    types = dataframe.dtypes
+
+    return types
