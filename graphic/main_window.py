@@ -4,6 +4,7 @@ from tkinter import ttk, filedialog, Menu
 from graphic.graphics_config import *
 from graphic.edit_data_form import EditForm
 from graphic.stats_forms import TextSubForm
+from graphic.stats_forms import ChooseVariablesForm
 
 
 class MainWindow(tk.Frame):
@@ -101,6 +102,8 @@ class MainWindow(tk.Frame):
             return
 
         # TODO proceed text submit
+        window = ChooseVariablesForm(self.root_frame, tuple(self.df.columns))
+        result = window.open()
         print("Текстовый отчет", result)
 
     def prepare_summary_table(self):

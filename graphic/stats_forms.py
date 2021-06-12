@@ -3,17 +3,15 @@ from tkinter import Toplevel, ttk
 from tkinter.messagebox import showerror
 
 
-class TextSubForm(Toplevel):
+class ChooseVariablesForm(Toplevel):
     def __init__(self, parent, headings):
         super().__init__(parent)
 
-        self.field1 = tk.StringVar()
-        self.field2 = tk.StringVar()
-
+        # TODO make it beautiful and universal!
         self.label1 = tk.Label(self, text="Первый параметр отчета")
+        self.combobox1 = ttk.Combobox(self, values=headings)
         self.label2 = tk.Label(self, text="Второй параметр отчета")
-        self.combobox1 = ttk.Combobox(self, values=headings, textvariable=self.field1)
-        self.combobox2 = ttk.Combobox(self, values=headings, textvariable=self.field2)
+        self.combobox2 = ttk.Combobox(self, values=headings)
 
         self.label1.grid(row=0, column=0)
         self.label2.grid(row=0, column=1)
