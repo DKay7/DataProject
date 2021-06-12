@@ -4,11 +4,6 @@ import pandas as pd
 import re
 
 
-def types_list(dataframe):
-    types_dict = {}
-    return types_dict
-
-
 def sort(flights):
     spaceships = []
     years = []
@@ -58,6 +53,3 @@ if __name__ == "__main__":
     params['Options'][4] = 1
     params['Misc'][1] = 'label'
     params['Misc'][4] = 'value'
-
-    # TODO bar_diagram doesnt return anything!
-    # stat = bar_diagram(params)

@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import Toplevel, ttk
+from tkinter.messagebox import showerror
 
 
 class ChooseVariablesForm(Toplevel):
@@ -22,6 +23,10 @@ class ChooseVariablesForm(Toplevel):
         self.grab_set()
         self.wait_window()
 
-        # TODO some error here.
-        # result = (self.combobox1.get(), self.combobox2.get())
-        # return result
+        result = (self.field1.get(), self.field2.get())
+
+        if not all(result):
+            showerror(title="Ошибка!", message="Поля не могут быть пустыми!")
+            return False
+
+        return result
