@@ -53,6 +53,3 @@ if __name__ == "__main__":
     params['Options'][4] = 1
     params['Misc'][1] = 'label'
     params['Misc'][4] = 'value'
-
-    # TODO bar_diagram doesnt return anything!
-    # stat = bar_diagram(params)
