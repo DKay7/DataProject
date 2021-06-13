@@ -1,16 +1,19 @@
 import tkinter as tk
 import pickle
+import os
+import pandas as pd
 from tkinter import ttk, filedialog, Menu
 from graphic.graphics_config import *
 from graphic.edit_data_form import EditForm
-from graphic.stats_forms import TextSubForm
 from graphic.stats_forms import ChooseVariablesForm
+from library.utils import *
 
 
 class MainWindow(tk.Frame):
     def __init__(self, root):
         self.root_frame = root
         self.df = None
+        self.types = None
         tk.Frame.__init__(self,  self.root_frame)
 
         self.table_frame = self.get_main_window()
@@ -145,7 +148,9 @@ class MainWindow(tk.Frame):
 
     def save_file_button_action(self):
         try:
-            with filedialog.asksaveasfile(mode='wb', defaultextension=".kek") as file:
+            with filedialog.asksaveasfile(mode='wb',
+                                          defaultextension=".kek",
+                                          filetypes=[('DP-files files', '*.kek')]) as file:
                 if file is None:
                     return
 
@@ -155,17 +160,29 @@ class MainWindow(tk.Frame):
             return
 
     def open_file_button_action(self):
-        try:
-            with filedialog.askopenfile(mode="rb",
-                                        initialdir=r"../data/",
-                                        defaultextension='.kek',
-                                        filetypes=[('DP-files files', '*.kek')]) as file:
+        filepath = filedialog.askopenfilename(initialdir=r"../data/",
+                                    defaultextension='.kek',
+                                    filetypes=[('DP-files files', '*.kek'),
+                                               ('CSV files', '*.csv')])
 
-                self.df = pickle.load(file)
-                self.add_df()
-                self.add_main_menu()
-        except AttributeError:
+        if not filepath:
             return
+
+        filename, file_extension = os.path.splitext(filepath)
+
+        if file_extension == '.csv':
+            with open(filename+'.kek', 'wb') as file:
+                data = pd.read_csv(filepath)
+                self.types = get_types_list(data)
+                pickle.dump(data, file)
+                filepath = filename+'.kek'
+                print("File saved as a bytes file")
+
+        with open(filepath, 'rb') as file:
+            self.df = pickle.load(file)
+
+        self.add_df()
+        self.add_main_menu()
 
         print("File opened")
 
