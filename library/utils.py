@@ -3,15 +3,15 @@ import pandas as pd
 
 def get_types_list(dataframe):
     flag = False
-
+    
     for name in dataframe.columns:
         try:
-            if dataframe[name][0].split(':') == 3:
+            if len(dataframe[name][0].split(':')) == 3:
                 flag = True
                 break
         except AttributeError:
             pass
-
+    
     if flag:
         time = []
         dataframe[name].apply(lambda x: x.split(':')).apply(
