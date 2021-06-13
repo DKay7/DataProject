@@ -2,12 +2,12 @@ import pandas as pd
 
 
 def get_types_list(dataframe):
-    flag = false
+    flag = False
 
     for name in dataframe.columns:
         try:
             if dataframe[name][0].split(':') == 3:
-                flag = true
+                flag = True
                 break
         except AttributeError:
             pass
