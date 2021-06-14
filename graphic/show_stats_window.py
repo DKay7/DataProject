@@ -2,6 +2,7 @@ import pickle
 import pandas as pd
 import tkinter as tk
 from tkinter import Toplevel, ttk, Menu, filedialog
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 class TextStatShowWindow(Toplevel):
@@ -82,11 +83,43 @@ class TextStatShowWindow(Toplevel):
         mainmenu.add_cascade(label="Файл", menu=filemenu)
 
     def save_file_button_action(self):
-        with filedialog.asksaveasfile(mode='wb',
-                                      defaultextension=".kek",
-                                      filetypes=[('DP files', '*.kek')]) as file:
-            if file is None:
-                return
+        filepath = filedialog.asksaveasfilename(defaultextension=".kek",
+                                                filetypes=[('DP files', '*.kek')])
 
+        if not filepath:
+            return
+
+        with open(filepath, mode="wb") as file:
             pickle.dump(self.df, file)
 
+
+class PlotStatShowWindow(Toplevel):
+    def __init__(self, parent, fig):
+        super().__init__(parent)
+        self.resizable(0, 0)
+
+        self.fig = fig
+        self.add_plot()
+        self.add_main_menu()
+
+    def add_plot(self):
+        canvas = FigureCanvasTkAgg(self.fig, master=self)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=0.8)
+
+    def add_main_menu(self):
+        mainmenu = Menu(self)
+        filemenu = Menu(mainmenu, tearoff=0)
+
+        self.config(menu=mainmenu)
+        filemenu.add_command(label="Сохранить...", command=self.save_file_button_action)
+        mainmenu.add_cascade(label="Файл", menu=filemenu)
+
+    def save_file_button_action(self):
+        filepath = filedialog.asksaveasfilename(defaultextension=".png",
+                                                filetypes=[('DP Graph files', '*.png')])
+
+        if not filepath:
+            return
+
+        self.fig.savefig(filepath)
