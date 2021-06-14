@@ -9,6 +9,7 @@ def simple_output(data, names):  # zero, one or several columns are expected
 
 def statistic_output(data, name):  # one column is expected
     column = data[name]
+
     qualitative, quantitative = separate_columns(data)
     if column.name in tuple(quantitative):
         output = pd.DataFrame()
@@ -27,6 +28,7 @@ def statistic_output(data, name):  # one column is expected
         return output
 
     else:
+
         output = pd.DataFrame()
         output = output.assign(Counts=column.value_counts())
         sum_ = output['Counts'].sum()
