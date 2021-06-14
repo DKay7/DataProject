@@ -251,13 +251,18 @@ class BoxWhiskerPlotSubmitForm(Toplevel):
 
         result = list()
         for variable in self.variables:
-            result.append(variable.get())
+            value = variable.get()
+            if value not in result:
+                result.append(value)
+            else:
+                showerror(title="Ошибка!", message="Укажите уникальные столбцы")
+                return False
 
         if not all(result):
-            showerror(title="Ошибка!", message="Выберите оба столбца")
+            showerror(title="Ошибка!", message="Укажите данные во всех столбцах")
             return False
 
-        return result
+        return result[:-1], self.agg_methods[result[-1]]
 
 
 class ScatterPlotSubmitForm(Toplevel):
@@ -266,6 +271,7 @@ class ScatterPlotSubmitForm(Toplevel):
         self.resizable(0, 0)
 
         qualitative_cols, quantitative_cols = separate_columns(df)
+
         cols = tuple([tuple(quantitative_cols), tuple(quantitative_cols), tuple(qualitative_cols)])
         labels = tuple(["Первый количественный параметр",
                         "Второй количественный параметр",

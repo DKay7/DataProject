@@ -1,29 +1,68 @@
 from matplotlib.figure import Figure
-from loaders import data
-import re
 
 
-def sort(flights):
-    spaceships = []
-    years = []
-
-    for index in flights.index:
-        flights_array = flights[index].split(',')
-        for j in range(len(flights_array)):
-            flights_array[j] = re.sub(r'\)', '', flights_array[j])
-            flights_array[j] = re.sub(r' ', '', flights_array[j])
-            s = flights_array[j].split(r'(')
-            spaceships.append(s[0])
-            years.append(s[1])
-
-    return years, spaceships
-
-
-def bar_diagram(df, names):
+def hist_diagram(data, *names):
     assert len(names) == 2
 
-    fig = Figure(figsize=(6, 6))
-    a = fig.add_subplot(111)
-    a.bar(df[names[0]], df[names[1]], color='red')
+    fig = Figure(figsize=(26, 20))
+    ax = fig.add_subplot(111)
+    g = data.groupby(data[names[0]])[names[1]].sum()
+    ax.hist(data[names[0]], bins=g.size, weights=data[names[1]], label=g.index, color='teal')
+
+    ax.tick_params(axis='x',
+                   labelsize=18,
+                   direction='out',
+                   labelrotation=90)
+
+    ax.tick_params(axis='y',
+                   labelsize=15,
+                   direction='out')
+
+    ax.grid(which='major',
+            color='darkcyan')
 
     return fig
+
+
+def bar_diagram(df, *names):
+    assert len(names) == 2
+
+    fig = Figure(figsize=(26, 20))
+    ax = fig.add_subplot(111)
+    ax.bar(df[names[0]], df[names[1]], color='teal')
+
+    ax.tick_params(axis='x',
+                   labelsize=18,
+                   direction='out',
+                   labelrotation=90)
+
+    ax.tick_params(axis='y',
+                   labelsize=15,
+                   direction='out')
+
+    return fig
+
+
+def box_diagram(df, *names):
+    assert len(names) == 2
+
+    fig = Figure(figsize=(26, 20))
+    ax = fig.add_subplot(111)
+    df.boxplot(ax=ax, column=names[0], by=names[1])
+
+    ax.tick_params(axis='x',
+                   labelsize=18,
+                   direction='out',
+                   labelrotation=90)
+
+    ax.tick_params(axis='y',
+                   labelsize=15,
+                   direction='out')
+
+    return fig
+
+
+def scatter_diagram(df, *names):
+    assert len(names) == 3
+    pass
+
