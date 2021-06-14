@@ -10,7 +10,8 @@ from graphic.stats_forms import ClusteredBarPlotSubmitForm, CategorizedHistogram
 from graphic.stats_forms import BoxWhiskerPlotSubmitForm, ScatterPlotSubmitForm
 from library.utils import get_types_list
 from scripts.stat_text_submission_utils import simple_output, statistic_output, pivot_output
-from graphic.show_stats_window import TextStatShowWindow
+from scripts.stat_plot_submission_utils import bar_diagram
+from graphic.show_stats_window import TextStatShowWindow, PlotStatShowWindow
 
 
 class MainWindow(tk.Frame):
@@ -188,7 +189,10 @@ class MainWindow(tk.Frame):
         if not result:
             return
 
-        print("Столбчатая диаграмма\n", result.head())
+        figure = bar_diagram(self.df, result)
+        PlotStatShowWindow(self.root_frame, figure)
+
+        print("Столбчатая диаграмма\n", result)
 
     def prepare_categorized_histogram(self):
         # TODO make it!
@@ -236,20 +240,17 @@ class MainWindow(tk.Frame):
             self.mouse_menu.post(event.x_root, event.y_root)
 
     def save_file_button_action(self):
-        try:
-            with filedialog.asksaveasfile(mode='wb',
-                                          defaultextension=".kek",
-                                          filetypes=[('DP files', '*.kek')]) as file:
-                if file is None:
-                    return
+        filepath = filedialog.asksaveasfilename(defaultextension=".kek",
+                                                filetypes=[('DP files', '*.kek')])
 
-                pickle.dump(self.df, file)
-
-        except AttributeError:
+        if not filepath:
             return
 
+        with open(filepath, mode="wb") as file:
+            pickle.dump(self.df, file)
+
     def open_file_button_action(self):
-        filepath = filedialog.askopenfilename(initialdir=r"../data/",
+        filepath = filedialog.askopenfilename(initialdir=r"./data/",
                                               defaultextension='.kek',
                                               filetypes=[('DP files', '*.kek'),
                                                          ('CSV files', '*.csv')])
@@ -276,8 +277,6 @@ class MainWindow(tk.Frame):
             self.add_df()
 
         self.add_main_menu()
-
-        print("File opened")
 
     def add_table_entry(self):
         columns = list(self.df.columns)
