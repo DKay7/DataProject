@@ -96,8 +96,8 @@ class TextStatShowWindow(Toplevel):
 class PlotStatShowWindow(Toplevel):
     def __init__(self, parent, fig):
         super().__init__(parent)
+        # self.resizable(0, 0)
 
-        self.resizable(0, 0)
         self.fig = fig
         self.add_plot()
         self.add_main_menu()
@@ -106,7 +106,6 @@ class PlotStatShowWindow(Toplevel):
         canvas = FigureCanvasTkAgg(self.fig, master=self)
         canvas.draw()
         canvas.get_tk_widget().pack(fill=tk.BOTH, expand=0.8)
-
 
     def add_main_menu(self):
         mainmenu = Menu(self)

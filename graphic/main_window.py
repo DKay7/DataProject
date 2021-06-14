@@ -10,7 +10,7 @@ from graphic.stats_forms import ClusteredBarPlotSubmitForm, CategorizedHistogram
 from graphic.stats_forms import BoxWhiskerPlotSubmitForm, ScatterPlotSubmitForm
 from library.utils import get_types_list
 from scripts.stat_text_submission_utils import simple_output, statistic_output, pivot_output
-from scripts.stat_plot_submission_utils import bar_diagram
+from scripts.stat_plot_submission_utils import bar_diagram, hist_diagram, box_diagram, scatter_diagram
 from graphic.show_stats_window import TextStatShowWindow, PlotStatShowWindow
 
 
@@ -202,6 +202,9 @@ class MainWindow(tk.Frame):
         if not result:
             return
 
+        figure = hist_diagram(self.df, result)
+        PlotStatShowWindow(self.root_frame, figure)
+
         print("Гистограмма\n", result)
 
     def prepare_box_whiskers_diagram(self):
@@ -211,6 +214,10 @@ class MainWindow(tk.Frame):
 
         if not result:
             return
+
+        figure = box_diagram(self.df, result)
+        PlotStatShowWindow(self.root_frame, figure)
+
         print("Диаграмма бокса-вискера\n", result)
 
     def prepare_scatter_plot(self):
@@ -220,6 +227,10 @@ class MainWindow(tk.Frame):
 
         if not result:
             return
+
+        figure = scatter_diagram(self.df, result)
+        PlotStatShowWindow(self.root_frame, figure)
+
         print("Диаграмма рассеивания\n", result)
 
     def bind_events(self):
