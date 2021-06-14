@@ -266,10 +266,11 @@ class ScatterPlotSubmitForm(Toplevel):
         self.resizable(0, 0)
 
         qualitative_cols, quantitative_cols = separate_columns(df)
-        cols = tuple([tuple(qualitative_cols), tuple(qualitative_cols), tuple(quantitative_cols)])
-        labels = tuple(["Первый качественный параметр",
-                        "Второй качественный параметр",
-                        "Количественный параметр"])
+
+        cols = tuple([tuple(quantitative_cols), tuple(quantitative_cols), tuple(qualitative_cols)])
+        labels = tuple(["Первый количественный параметр",
+                        "Второй количественный параметр",
+                        "Качественный параметр"])
 
         self.variables = list()
 

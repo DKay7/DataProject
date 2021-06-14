@@ -26,7 +26,8 @@ def get_types_list(dataframe):
 
 
 def separate_columns(dataframe):
-    quantitative = dataframe.select_dtypes(include="number")
-    qualitative = dataframe.select_dtypes(exclude="number")
+
+    quantitative = dataframe.select_dtypes(include=["number", "timedelta64[ns]"])
+    qualitative = dataframe.select_dtypes(exclude=["number", "timedelta64[ns]"])
 
     return qualitative, quantitative

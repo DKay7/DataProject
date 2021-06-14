@@ -2,9 +2,7 @@ import pickle
 import pandas as pd
 import tkinter as tk
 from tkinter import Toplevel, ttk, Menu, filedialog
-import matplotlib
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
 
 
 class TextStatShowWindow(Toplevel):
@@ -98,7 +96,8 @@ class TextStatShowWindow(Toplevel):
 class PlotStatShowWindow(Toplevel):
     def __init__(self, parent, fig):
         super().__init__(parent)
-        matplotlib.use('TkAgg')
+
+        self.resizable(0, 0)
         self.fig = fig
         self.add_plot()
         self.add_main_menu()
@@ -106,7 +105,8 @@ class PlotStatShowWindow(Toplevel):
     def add_plot(self):
         canvas = FigureCanvasTkAgg(self.fig, master=self)
         canvas.draw()
-        canvas.get_tk_widget().grid(row=0, column=0, sticky="nsew")
+        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=0.8)
+
 
     def add_main_menu(self):
         mainmenu = Menu(self)
