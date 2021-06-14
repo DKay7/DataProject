@@ -1,4 +1,5 @@
 import pandas as pd
+from library.utils import separate_columns
 
 
 def simple_output(data, names):  # zero, one or several columns are expected
@@ -8,19 +9,24 @@ def simple_output(data, names):  # zero, one or several columns are expected
 
 def statistic_output(data, name):  # one column is expected
     column = data[name]
-
-    if column.name in tuple(data.select_dtypes(include="number")):
+    qualitative, quantitative = separate_columns(data)
+    if column.name in tuple(quantitative):
         output = pd.DataFrame()
-        output = output.assign(Maximum='', Minimum='', Mean='', StandartDeviation='', Variance='')
+        output = output.assign(Maximum='', Minimum='', Mean='', StandardDeviation='', Variance='')
         output.loc[0, 'Maximum'] = str(column.max())
         output.loc[0, 'Minimum'] = str(column.min())
         output.loc[0, 'Mean'] = str(column.mean())
-        output.loc[0, 'StandartDeviation'] = str(column.std())
-        output.loc[0, 'Variance'] = str(column.var())
-        output.set_index(pd.Index([str(column.name)]))
-        return output
-    else:
+        output.loc[0, 'StandardDeviation'] = str(column.std())
 
+        try:
+            output.loc[0, 'Variance'] = str(column.var())
+        except TypeError:
+            output.loc[0, 'Variance'] = "Не определено"
+
+        output = output.set_index(pd.Index([str(column.name)]))
+        return output
+
+    else:
         output = pd.DataFrame()
         output = output.assign(Counts=column.value_counts())
         sum_ = output['Counts'].sum()
