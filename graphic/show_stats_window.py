@@ -96,7 +96,7 @@ class TextStatShowWindow(Toplevel):
 class PlotStatShowWindow(Toplevel):
     def __init__(self, parent, fig):
         super().__init__(parent)
-        self.resizable(0, 0)
+        # self.resizable(0, 0)
 
         self.fig = fig
         self.add_plot()
