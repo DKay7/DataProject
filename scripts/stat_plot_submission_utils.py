@@ -51,7 +51,7 @@ def box_diagram(df, names):
     # fig = Figure(figsize=(7, 5))
     # ax = fig.add_subplot(111)
     fig, ax = plt.subplots(figsize=(7, 5))
-    df.boxplot(column=names[0], by=names[1])
+    df.boxplot(ax=ax, column=names[1], by=names[0])
 
     ax.tick_params(axis='x',
                    labelsize=7,
