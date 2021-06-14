@@ -48,10 +48,10 @@ def bar_diagram(df, names):
 def box_diagram(df, names):
     assert len(names) == 2
 
-    # fig = Figure(figsize=(7, 5))
-    # ax = fig.add_subplot(111)
-    fig, ax = plt.subplots(figsize=(7, 5))
-    df.boxplot(column=names[0], by=names[1])
+    fig = Figure(figsize=(7, 5))
+    ax = fig.add_subplot(111)
+
+    df.boxplot(ax=ax, by=names[0], column=names[1])
 
     ax.tick_params(axis='x',
                    labelsize=7,
