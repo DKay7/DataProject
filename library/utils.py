@@ -23,3 +23,10 @@ def get_types_list(dataframe):
     types = dataframe.dtypes
 
     return types
+
+
+def separate_columns(dataframe):
+    quantitative = dataframe.select_dtypes(include="number")
+    qualitative = dataframe.select_dtypes(exclude="number")
+
+    return qualitative, quantitative
