@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import pandas as pd
 
@@ -12,13 +11,16 @@ def hist_diagram(data, names):
     ax.hist(data[names[0]], bins=g.size, weights=data[names[1]], label=g.index, color='teal')
 
     ax.tick_params(axis='x',
-                   labelsize=7,
+                   labelsize=5,
                    direction='out',
+                   rotation=90,
                    labelrotation=90)
 
     ax.tick_params(axis='y',
                    labelsize=5,
-                   direction='out')
+                   direction='out',
+                   rotation=45,
+                   labelrotation=45)
 
     ax.grid(which='major',
             color='darkcyan')
@@ -29,18 +31,21 @@ def hist_diagram(data, names):
 def bar_diagram(df, names):
     assert len(names) == 2
 
-    fig = Figure(figsize=(7, 5))
+    fig = Figure(figsize=(9, 6))
     ax = fig.add_subplot(111)
-    ax.bar(df[names[0]], df[names[1]], color='teal')
+    ax.bar(list(map(lambda x: x[:5], df[names[0]])), list(map(lambda x: x[:5], df[names[1]])), color='teal')
 
     ax.tick_params(axis='x',
-                   labelsize=7,
+                   labelsize=5,
                    direction='out',
+                   rotation=90,
                    labelrotation=90)
 
     ax.tick_params(axis='y',
                    labelsize=5,
-                   direction='out')
+                   direction='out',
+                   rotation=45,
+                   labelrotation=45)
 
     return fig
 
@@ -48,10 +53,10 @@ def bar_diagram(df, names):
 def box_diagram(df, names):
     assert len(names) == 2
 
-    # fig = Figure(figsize=(7, 5))
-    # ax = fig.add_subplot(111)
-    fig, ax = plt.subplots(figsize=(7, 5))
-    df.boxplot(column=names[0], by=names[1])
+    fig = Figure(figsize=(7, 5))
+    ax = fig.add_subplot(111)
+
+    df.boxplot(ax=ax, by=names[0], column=names[1])
 
     ax.tick_params(axis='x',
                    labelsize=7,

@@ -24,7 +24,7 @@ class SimpleTextSubmissionForm(Toplevel):
         tk.Label(self, text="Выберите столбец, по которому будет составлен отчет").grid(row=0, column=0,
                                                                                         columnspan=len(self.headings),
                                                                                         sticky="N")
-        tk.Button(self, text="Подтвердить", command=self.destroy).grid(row=2, column=1,
+        tk.Button(self, text="Подтвердить", command=self.destroy).grid(row=2, column=0,
                                                                        columnspan=len(self.headings),
                                                                        sticky="S")
 

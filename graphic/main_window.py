@@ -261,7 +261,7 @@ class MainWindow(tk.Frame):
             pickle.dump(self.df, file)
 
     def open_file_button_action(self):
-        filepath = filedialog.askopenfilename(initialdir=r"./data/",
+        filepath = filedialog.askopenfilename(initialdir=r"../data/",
                                               defaultextension='.kek',
                                               filetypes=[('DP files', '*.kek'),
                                                          ('CSV files', '*.csv')])
@@ -299,7 +299,7 @@ class MainWindow(tk.Frame):
         result = form.open()
 
         self.df.loc[len(self.df.index)] = result
-        self.table.insert("", "end", text=len(self.df.index), values=result)
+        self.table.insert("", "end", text=len(self.df.index) - 1, values=result)
 
     def edit_table_entry(self):
         item_id = self.table.selection()[0]
@@ -319,8 +319,11 @@ class MainWindow(tk.Frame):
         self.table.item(item_id, values=result)
 
     def delete_table_entry(self):
-        selected_item = self.table.selection()[0]
-        self.table.delete(selected_item)
+        item_id = self.table.selection()[0]
+        item_dict = self.table.item(item_id)
+        index = item_dict['text']
+        self.df.drop(self.df.loc[index].index, inplace=True, axis=1)
+        self.table.delete(item_id)
 
     def start_main_loop(self):
         self.root_frame.mainloop()
